@@ -58,6 +58,8 @@ def preprocessing(stagingFolder, refDate):
     releaseYear(stagingFolder, refDate)
     dateAdded(stagingFolder, refDate)
 
+    categorical(stagingFolder, 'rating')
+
     return
 
 def categoricalList(stagingFolder, fileNameStart):
@@ -103,6 +105,48 @@ def categoricalList(stagingFolder, fileNameStart):
 
 
     return
+
+def categorical(stagingFolder, fileNameStart):
+
+    strings = []
+
+    inpFile = os.path.join(stagingFolder, 'columns', f'{fileNameStart}.txt')
+    outFile = os.path.join(stagingFolder, 'columnsMeta', f'{fileNameStart}.txt')
+
+    with open( inpFile ) as fInp:
+        for l in fInp:
+            l = l.strip().split('\t')
+            if len(l) == 1:
+                continue
+            
+            strings.append(l[1].strip())
+
+    strings = [s for s in strings if s != '']
+    strings = sorted(list(set(strings)))
+
+    stringsMappings        = {c:(i+1) for i,c in enumerate(strings)}
+    stringsReverseMappings = {(i+1):c for i,c in enumerate(strings)}
+
+    os.makedirs(os.path.join(stagingFolder, 'columnsMeta'), exist_ok=True)
+
+    with open(os.path.join(stagingFolder, 'columnsMeta', f'{fileNameStart}Mappings.txt'), 'w') as fOut:
+        json.dump( stringsMappings, fOut)
+
+    with open(os.path.join(stagingFolder, 'columnsMeta', f'{fileNameStart}ReverseMappings.txt'), 'w') as fOut:
+        json.dump( stringsReverseMappings, fOut)
+
+    with open(inpFile) as fInp, open(outFile, 'w') as fOut:
+        for l in fInp:
+            l = l.strip().split('\t')
+            if len(l) == 1:
+                result = 0
+            else:
+                result = stringsMappings.get(l[1], 0)
+            # result = json.dumps(result)
+            fOut.write( f'{result}' + '\n' )
+
+
+    return 
 
 def releaseYear(stagingFolder, refDate):
 

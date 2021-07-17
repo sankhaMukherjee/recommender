@@ -33,6 +33,12 @@ Certain categories comprise of a list of categorical values. These are the follo
 - director
 - listed_in
 
+Some categorical values are just converted into normal categorical columns. They are also
+converted into a label encoder and later converted using an embedding layer into a vector.
+These are
+
+- rating
+
 Date columns are converted to the difference between a date and a referene date (2021, 12, 31).
 These have also been converted to a floating point number between 0 and 1 using simple scaling.
 If a date was missing 'December 15, 2017' has been used (arbitrarily chosen).
@@ -40,6 +46,8 @@ These are the following:
 
 - release_year
 - date_added
+
+Text Columns have not been used yet. They may be used later
 
 
 # 2. Models
