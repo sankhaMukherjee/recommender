@@ -1,4 +1,5 @@
 import csv, os, json
+import numpy as np
 from datetime import datetime as dt
 from datetime import timedelta as tDel
 
@@ -50,15 +51,17 @@ def separateColumns(fileName, dataFolder):
 
 def preprocessing(stagingFolder, refDate):
 
-    # categoricalList(stagingFolder, 'country')
-    # categoricalList(stagingFolder, 'cast')
-    # categoricalList(stagingFolder, 'director')
-    # categoricalList(stagingFolder, 'listed_in')
+    categoricalList(stagingFolder, 'country')
+    categoricalList(stagingFolder, 'cast')
+    categoricalList(stagingFolder, 'director')
+    categoricalList(stagingFolder, 'listed_in')
 
     releaseYear(stagingFolder, refDate)
     dateAdded(stagingFolder, refDate)
 
     categorical(stagingFolder, 'rating')
+
+    duration(stagingFolder)
 
     return
 
@@ -180,5 +183,27 @@ def dateAdded(stagingFolder, refDate):
     with open(outFile, 'w') as fOut:
         toWrite = '\n'.join([f'{r:.6f}' for r in rows])
         fOut.write( toWrite )
+
+    return
+
+def duration(stagingFolder):
+
+    inpFile = os.path.join(stagingFolder, 'columns', f'duration.txt')
+    outFile = os.path.join(stagingFolder, 'columnsMeta', f'duration.txt')
+    with open(inpFile) as f:
+        rows = [ l.strip().split('\t')[1] for l in f]
+        rows = [ ( (0, float(r.split()[0]) ) if 'Season' in r else (float(r.split()[0]), 0)) for r in rows]
+        rows1, rows2 = zip(*rows)
+        rows1 = ( np.array(rows1) - min(rows1) )/( max(rows1) - min(rows1) )
+        rows2 = ( np.array(rows2) - min(rows2) )/( max(rows2) - min(rows2) )
+
+        rows = list(zip(rows1, rows2))
+
+        # print(rows)
+        
+    with open(outFile, 'w') as fOut:
+        for r in rows:
+            fOut.write(json.dumps(r) + '\n')
+
 
     return

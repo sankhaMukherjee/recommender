@@ -47,6 +47,10 @@ These are the following:
 - release_year
 - date_added
 
+Duration is given either in terms of minutes or Seasons. This is represented by a tuple of numbers.
+If the duration is in munutes, the first tuple is used. Otherwise, the second value of the tuple is used.
+Each is individually normalized.
+
 Text Columns have not been used yet. They may be used later
 
 
