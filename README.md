@@ -17,12 +17,22 @@ format.
 Data is preprocessed in several steps. These are listed below:
 
 1. splitting the columns
-2. 
+2. converting to numeric columns
 
 ### 1.1.1. Splitting the Columns
 
 Each column in the dataset is separated into a set of files. The row number of the
 original file is put at the beginning of each line to maintain data lineage.
+
+### 1.1.2.Converting to Numeric Columns
+
+Certain categories comprise of a list of categorical values. These are the following:
+
+- cast
+- country
+- director
+- listed_in
+
 
 # 2. Models
 

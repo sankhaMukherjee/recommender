@@ -49,6 +49,9 @@ def separateColumns(fileName, dataFolder):
 def preprocessing(stagingFolder):
 
     categoricalList(stagingFolder, 'country')
+    categoricalList(stagingFolder, 'cast')
+    categoricalList(stagingFolder, 'director')
+    categoricalList(stagingFolder, 'listed_in')
 
     return
 
