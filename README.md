@@ -4,7 +4,25 @@ A set of recommender systems that are popularly used for various things.
 
 # 1. Dataset
 
-# 1.1. Data Preprocessing
+The data is obtained form a Kaggle competition present here 
+[link](https://www.kaggle.com/shivamb/netflix-shows). You will need to download
+the data from the file present, and put it in the folder `data/rawData` within 
+the same repo. The data folder will not be tracked within this repository. The
+data will contain a single CSV file called `netflix_titles.csv`. This CSV file
+will contain 12 columns, and each column will be converted into an appropriate
+format.
+
+## 1.1. Data Preprocessing
+
+Data is preprocessed in several steps. These are listed below:
+
+1. splitting the columns
+2. 
+
+### 1.1.1. Splitting the Columns
+
+Each column in the dataset is separated into a set of files. The row number of the
+original file is put at the beginning of each line to maintain data lineage.
 
 # 2. Models
 
