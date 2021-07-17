@@ -48,40 +48,40 @@ def separateColumns(fileName, dataFolder):
 
 def preprocessing(stagingFolder):
 
-    processCountry(stagingFolder)
+    categoricalList(stagingFolder, 'country')
 
     return
 
-def processCountry(stagingFolder):
+def categoricalList(stagingFolder, fileNameStart):
 
-    countries = []
-    countryMappings = {}
+    strings = []
 
-    inpFile = os.path.join(stagingFolder, 'columns', 'country.txt')
+    inpFile = os.path.join(stagingFolder, 'columns', f'{fileNameStart}.txt')
+    outFile = os.path.join(stagingFolder, 'columnsMeta', f'{fileNameStart}.txt')
+
     with open( inpFile ) as fInp:
         for l in fInp:
             l = l.strip().split('\t')
             if len(l) == 1:
                 continue
             
-            countries += [c.strip() for c in l[1].split(',')]
+            strings += [c.strip() for c in l[1].split(',')]
 
-    countries = sorted(list(set(countries)))
-    countries = [c for c in countries if c != '']
-    
+    strings = [s for s in strings if s != '']
+    strings = sorted(list(set(strings)))
+
     # Reserve 0 for unknown
-    countryMappings        = {c:(i+1) for i,c in enumerate(countries)}
-    countryReverseMappings = {(i+1):c for i,c in enumerate(countries)}
+    stringsMappings        = {c:(i+1) for i,c in enumerate(strings)}
+    stringsReverseMappings = {(i+1):c for i,c in enumerate(strings)}
 
     os.makedirs(os.path.join(stagingFolder, 'columnsMeta'), exist_ok=True)
 
-    with open(os.path.join(stagingFolder, 'columnsMeta', 'countryMappings.txt'), 'w') as fOut:
-        json.dump( countryMappings, fOut)
+    with open(os.path.join(stagingFolder, 'columnsMeta', f'{fileNameStart}Mappings.txt'), 'w') as fOut:
+        json.dump( stringsMappings, fOut)
 
-    with open(os.path.join(stagingFolder, 'columnsMeta', 'countryReverseMappings.txt'), 'w') as fOut:
-        json.dump( countryReverseMappings, fOut)
+    with open(os.path.join(stagingFolder, 'columnsMeta', f'{fileNameStart}ReverseMappings.txt'), 'w') as fOut:
+        json.dump( stringsReverseMappings, fOut)
 
-    outFile = os.path.join(stagingFolder, 'columnsMeta', 'country.txt')
     with open(inpFile) as fInp, open(outFile, 'w') as fOut:
         for l in fInp:
             l = l.strip().split('\t')
@@ -89,8 +89,11 @@ def processCountry(stagingFolder):
                 result = [0]
             else:
                 l      = [l.strip() for l in l[1].split(',')]
-                result = sorted(list(set([ countryMappings.get(m, 0) for m in l])))
+                result = sorted(list(set([ stringsMappings.get(m, 0) for m in l])))
             result = json.dumps(result)
             fOut.write( result + '\n' )
 
+
     return
+
+
