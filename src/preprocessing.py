@@ -1,5 +1,6 @@
 import json
 from utils.dataUtils import readRawData as rD
+from datetime import datetime as dt
 
 def main():
 
@@ -12,7 +13,8 @@ def main():
 
     if todo['preprocessing']:
         print('Separating Raw Data Columns')
-        rD.preprocessing( config['dataStaging'] )
+        refDate = dt(*config['refDate'])
+        rD.preprocessing( config['dataStaging'], refDate )
     
     
 

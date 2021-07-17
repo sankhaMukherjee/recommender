@@ -33,6 +33,14 @@ Certain categories comprise of a list of categorical values. These are the follo
 - director
 - listed_in
 
+Date columns are converted to the difference between a date and a referene date (2021, 12, 31).
+These have also been converted to a floating point number between 0 and 1 using simple scaling.
+If a date was missing 'December 15, 2017' has been used (arbitrarily chosen).
+These are the following:
+
+- release_year
+- date_added
+
 
 # 2. Models
 

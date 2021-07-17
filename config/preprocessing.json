@@ -4,6 +4,7 @@
         "separateColumns": false,
         "preprocessing": true
     },
-    "rawData" : "data/rawData/netflix_titles.csv",
-    "dataStaging" : "data/intermediate/staging"
+    "rawData"     : "data/rawData/netflix_titles.csv",
+    "dataStaging" : "data/intermediate/staging",
+    "refDate"     : [2021, 12, 31]
 }

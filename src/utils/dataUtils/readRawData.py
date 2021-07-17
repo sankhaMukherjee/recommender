@@ -1,4 +1,6 @@
 import csv, os, json
+from datetime import datetime as dt
+from datetime import timedelta as tDel
 
 # ----------------------------------------------
 # Raw data to Columns
@@ -46,12 +48,15 @@ def separateColumns(fileName, dataFolder):
 # Columnar data to 
 # ----------------------------------------------
 
-def preprocessing(stagingFolder):
+def preprocessing(stagingFolder, refDate):
 
-    categoricalList(stagingFolder, 'country')
-    categoricalList(stagingFolder, 'cast')
-    categoricalList(stagingFolder, 'director')
-    categoricalList(stagingFolder, 'listed_in')
+    # categoricalList(stagingFolder, 'country')
+    # categoricalList(stagingFolder, 'cast')
+    # categoricalList(stagingFolder, 'director')
+    # categoricalList(stagingFolder, 'listed_in')
+
+    releaseYear(stagingFolder, refDate)
+    dateAdded(stagingFolder, refDate)
 
     return
 
@@ -99,4 +104,37 @@ def categoricalList(stagingFolder, fileNameStart):
 
     return
 
+def releaseYear(stagingFolder, refDate):
 
+    inpFile = os.path.join(stagingFolder, 'columns', f'release_year.txt')
+    outFile = os.path.join(stagingFolder, 'columnsMeta', f'release_year.txt')
+    with open(inpFile) as f:
+        rows = [ l.strip().split('\t')[1] for l in f]
+        rows = [ int(r) for r in rows ]
+        rows = [ (refDate-dt(r,1,1)).days for r in rows ]
+        maxRows, minRows = max(rows), min(rows)
+        rows = [ (r-minRows)/( maxRows-minRows ) for r in rows]
+
+    with open(outFile, 'w') as fOut:
+        toWrite = '\n'.join([f'{r:.6f}' for r in rows])
+        fOut.write( toWrite )
+
+    return
+
+def dateAdded(stagingFolder, refDate):
+
+    inpFile = os.path.join(stagingFolder, 'columns', f'date_added.txt')
+    outFile = os.path.join(stagingFolder, 'columnsMeta', f'date_added.txt')
+    with open(inpFile) as f:
+        rows = [ l.strip().split('\t') for l in f]
+        rows = [ (r[1] if len(r)==2 else 'December 15, 2017') for r in rows]
+        rows = [ dt.strptime(r, '%B %d, %Y') for r in rows ]
+        rows = [ (refDate-r).days for r in rows ]
+        maxRows, minRows = max(rows), min(rows)
+        rows = [ (r-minRows)/( maxRows-minRows ) for r in rows]
+
+    with open(outFile, 'w') as fOut:
+        toWrite = '\n'.join([f'{r:.6f}' for r in rows])
+        fOut.write( toWrite )
+
+    return
