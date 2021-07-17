@@ -1,4 +1,9 @@
 {
+
+    "TODO": {
+        "separateColumns": false,
+        "preprocessing": true
+    },
     "rawData" : "data/rawData/netflix_titles.csv",
-    "dataStaging" : "data/intermediate/staging/columns"
+    "dataStaging" : "data/intermediate/staging"
 }

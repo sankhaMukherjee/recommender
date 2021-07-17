@@ -9,6 +9,10 @@ def main():
     if todo['separateColumns']:
         print('Separating Raw Data Columns')
         rD.separateColumns( config['rawData'], config['dataStaging'] )
+
+    if todo['preprocessing']:
+        print('Separating Raw Data Columns')
+        rD.preprocessing( config['dataStaging'] )
     
     
 
